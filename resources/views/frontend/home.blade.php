@@ -13,11 +13,15 @@
 			<p>{{ $user->nome }} {{ $user->cognome }}</p>
 		</span>
 		<div class="pull-right" style="margin-top: 20px;">
-			<button type="button" class="btn btn-primary">Edit</button>
+			<button type="button" class="btn btn-danger">Edit</button>
 		</div>
 	</div>
 @endforeach
 
+@endsection
+
+@section('back_button')
+	<a href="{{ url('/') }}" class="btn btn-primary pull-left"><< Home Page</a>
 @endsection
 
 @section('button') Add New Contact >> @endsection

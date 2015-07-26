@@ -47,7 +47,8 @@
         <p>@yield('content')</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">@yield('button')</button>
+        @yield('back_button')
+        <a href="{{ url('home/addcontact') }}" class="btn btn-primary">@yield('button')</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
