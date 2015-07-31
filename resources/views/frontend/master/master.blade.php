@@ -65,6 +65,7 @@
     <script src="{{ url('js/jquery.easing.min.js') }}"></script>
     <script src="{{ url('js/jquery.fittext.js') }}"></script>
     <script src="{{ url('js/wow.min.js') }}"></script>
+    <script src="{{ url('js/utils.js') }}"></script>
 
     <!-- Custom Theme JavaScript -->
     <script src="{{ url('js/creative.js') }}"></script>
