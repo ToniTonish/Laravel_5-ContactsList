@@ -17,6 +17,8 @@ class User extends Model
      */
     protected $table = 'users';
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -38,6 +40,6 @@ class User extends Model
 
     public function emails()
     {
-        return $this -> hasMany('App/Number');
+        return $this -> hasMany('App/Email');
     }
 }

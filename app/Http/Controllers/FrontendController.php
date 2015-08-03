@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Number;
+use App\Email;
+
+use Input;
+use Redirect;
+use Response;
 
 class FrontendController extends Controller
 {
@@ -15,7 +21,7 @@ class FrontendController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function showUsers()
     {
         //
         $users = User::all();
@@ -28,9 +34,11 @@ class FrontendController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function addNewContact()
     {
         //
+
+        return view('frontend.addcontact');
     }
 
     /**
@@ -41,6 +49,124 @@ class FrontendController extends Controller
     public function store()
     {
         //
+        $user = new User();
+        $phone = new Number();
+        $email = new Email();
+
+        $user->nome = Input::get('name');
+        $user->cognome = Input::get('lastname');
+        $user->indirizzo = Input::get('address');
+        $user->im_profilo = Input::get('image');
+        $user->slug = $user->nome.$user->cognome;
+
+
+        if (Input::file('image') == "") {
+            $user->im_profilo = 'uploads/default.png';
+        }
+        else if (Input::file('image')->isValid()) {
+            $destinationPath = 'uploads'; // upload path
+            $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
+            $fileName = rand(11111,99999).'.'.$extension; // renameing image
+            Input::file('image')->move($destinationPath, $fileName); // uploading file to given path
+            $user->im_profilo = $destinationPath.'/'.$fileName;
+            // sending back with message
+            //Session::flash('success', 'Upload successfully'); 
+        } else {
+            $user->im_profilo = 'uploads/default.png';
+        }
+
+        $user->save();
+
+        if (Input::get('phone') != null) {
+            $phone->phone = Input::get('phone');
+            $phone->user_id = $user->id;
+
+            $phone->save();
+        }
+
+        if (Input::get('email') != null) {
+            $email->email = Input::get('email');
+            $email->user_id = $user->id;
+
+            $email->save();
+        }
+
+
+        return Redirect::to('home');
+    }
+
+    public function deleteUser() 
+    {
+        $id = Input::get('id');
+
+        $user = User::find($id);
+        $user->delete();
+
+        return Redirect::to('home');
+    }
+
+    public function deletePhoneNumber()
+    {
+
+        $slug = Input::get('userSlug');
+        $phone = Input::get('userPhone');
+        //dd($slug);
+
+        $user = User::where('slug', '=', $slug)->first();
+
+        $number = Number::where(['user_id' => $user->id, 'phone' => $phone])->first();
+        //dd($number);
+
+        $number->delete();
+
+        return Response::json(['success' => true, 'response' => 'ok']);
+    }
+
+    public function deleteMail()
+    {
+
+        $slug = Input::get('userSlug');
+        $mail = Input::get('userMail');
+        //dd($slug);
+
+        $user = User::where('slug', '=', $slug)->first();
+
+        $e_mail = Email::where(['user_id' => $user->id, 'email' => $mail])->first();
+        //dd($number);
+
+        $e_mail->delete();
+
+        return Response::json(['success' => true, 'response' => 'ok']);
+    }
+
+    public function addPhoneNumber() 
+    {
+        $number = new Number();
+
+        $slug = Input::get('userSlug');
+        $user = User::where('slug', '=', $slug)->first();
+
+        $number->phone = Input::get('userPhone');
+        $number->user_id = $user->id;
+
+        $number->save();
+
+        return Response::json(['success' => true, 'response' => 'ok']);
+    }
+
+    public function addMailNumber() 
+    {
+        $mail = new Email();
+
+        $slug = Input::get('userSlug');
+        $user = User::where('slug', '=', $slug)->first();
+
+        $mail->email = Input::get('userMail');
+        $mail->user_id = $user->id;
+
+        $mail->save();
+
+        return Response::json(['success' => true, 'response' => 'ok']);
     }
 
     /**
@@ -60,9 +186,21 @@ class FrontendController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function editUser($slug)
     {
         //
+        $user = User::where('slug', '=', $slug)->first();
+
+        $number = Number::where('user_id', '=', $user->id)->get();
+
+        $mail = Email::where('user_id', '=', $user->id)->get();
+
+        $option[0] = $user;
+        $option[1] = $number;
+        $option[2] = $mail;  
+        //dd($option);
+
+        return view('frontend.edit', compact('option'));
     }
 
     /**

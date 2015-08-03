@@ -6,41 +6,68 @@
 
 @section('content')
 
-{!! Form::open() !!}
+{!! Form::model($option) !!}
 
 
 <div class="media">
 	<div class="media-left">
-		<img data-src="holder.js/140x140" class="img-thumbnail" style="padding: 70px;" alt="140x140" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDE0MCAxNDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzE0MHgxNDAKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNGVjNDU5OGEwYiB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE0ZWM0NTk4YTBiIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjQ0LjA0Njg3NSIgeT0iNzQuNSI+MTQweDE0MDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true">
+		<div class="media-left">
+			{!! Form::file('image', array('class' => 'img-thumbnail', 'id' => 'inputId', 'style' => 'position: absolute; height: 140px; width: 140px; opacity: 0; z-index:9999; cursor: pointer;'))!!}
+			<img id="imgId" style="height: 140px; width: 140px; border: 1px solid black" src="{{ URL($option[0]->im_profilo) }}">
+		<div id="upImg" style="display: none; background-color: #434343; padding: 10px 0 0 20px; color: #FFFFFF; top: 126px;  width: 140px; height: 50px; position: absolute;">Upload Image</div>
+	</div>
 	</div>
 	<div class="media-body">
+		<div id="userSlug" style="display: none;">{{ $option[0]->slug }}</div>
 		<div class="form-group">
 			{!! Form::label('name', 'First Name', array('class' => 'control-label')) !!}
-			{!! Form::text('name', null, array('class' => 'form-control ', 'placeholder' => 'First Name')) !!}
+			{!! Form::text('name', $option[0]->nome, array('class' => 'form-control', 'placeholder' => 'First Name')) !!}
 			{!! Form::label('lastname', 'Last Name', array('class' => 'control-label', 'style' => 'margin-top: 15px;')) !!}
-			{!! Form::text('lastname', null, array('class' => 'form-control', 'placeholder' => 'Last Name')) !!}	
-			</div>	
+			{!! Form::text('lastname', $option[0]->cognome, array('class' => 'form-control', 'placeholder' => 'Last Name')) !!}	
+		</div>	
 	</div>
 </div>
 
 <div class="form-group">
 	{!! Form::label('address', 'Address', array('class' => 'control-label')) !!}
 	<span class="add-on"><i class="glyphicon glyphicon-home"></i></span>
-	{!! Form::text('address', null, array('class' => 'form-control', 'placeholder' => 'Address')) !!}
+	{!! Form::text('address', $option[0]->indirizzo, array('class' => 'form-control', 'placeholder' => 'Address')) !!}
 </div>
 <hr>
 
-<div class="form-group">
+<div>
 	{!! Form::label('phone', 'Phone Number', array('class' => 'control-label')) !!}
 	<span class="add-on"><i class="glyphicon glyphicon-phone"></i></span>
-	{!! Form::text('phone', null, array('class' => 'form-control', 'placeholder' => 'Phone Number')) !!}
+	<button id="addPhoneButton" class="btn btn-success btn-xs pull-right" type="button" onclick="addPhoneForm()">Add Phone</a>
+</div>
+
+<div id="phoneList">
+	@foreach($option[1] as $opt)
+	<div class="form-group removePhone-select-container">
+		<div>
+			{!! Form::text('phone[]', $opt->phone, array('class' => 'form-control span4', 'placeholder' => 'Phone Number', 'style' => 'width: 85%; display: inline;') ) !!}
+			<img class="removePhone" style="float: right; height: 23px; width: 23px; margin: 5px 2px 0 0px; cursor: pointer;" src="{{ URL('/uploads/minus.png') }}">
+		</div>
+	</div>
+	@endforeach
 </div>
 
 <hr>
-<div class="form-group">
+<div>
 	{!! Form::label('email', 'E-mail', array('class' => 'control-label')) !!}
 	<span class="add-on"><i class="glyphicon glyphicon-envelope"></i></span>
-	{!! Form::email('email', null, array('class' => 'form-control', 'placeholder' => 'E-mail')) !!}
+	<button id="addMailButton" class="btn btn-success btn-xs pull-right" type="button" onclick="addMailForm()">Add Mail</button>
+</div>
+
+<div id="mailList">
+	@foreach($option[2] as $opt)
+	<div class="form-group removeMail-select-container">
+		<div>
+			{!! Form::email('email[]', $opt->email, array('class' => 'form-control span4', 'placeholder' => 'E-mail', 'style' => 'width: 85%; display: inline;')) !!}
+			<img class="removeMail" style="float: right; height: 23px; width: 23px; cursor: pointer; margin: 5px 2px 0 0;" src="{{ URL('/uploads/minus.png') }}">
+		</div>
+	</div>
+	@endforeach
 </div>
 
 
@@ -55,3 +82,155 @@
 @section('back_button')
 	<a href="{{ url('home') }}" class="btn btn-primary pull-left"><< Back</a>
 @endsection
+
+<script src="{{ url('js/jquery.js') }}"></script>
+<script>
+
+var phoneTemplate = '<div class="form-group removePhone-select-container">'+
+		'<div>'+
+			'{!! Form::text('phone[]', null, array('class' => 'form-control span4', 'placeholder' => 'Phone Number', 'style' => 'width: 85%; display: inline;') ) !!}'+
+			'<img class="removePhone" style="float: right; height: 23px; width: 23px; margin: 5px 2px 0 0px; cursor: pointer;" src="{{ URL('/uploads/minus.png') }}">'+
+			'<img class="addPhone" style="float: right; height: 23px; width: 23px; margin: 5px 2px 0 0; cursor: pointer;" src="{{ URL('/uploads/plus.png') }}">'+
+		'</div>'+
+	'</div>';
+
+var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
+		'<div>'+
+			'{!! Form::email('email[]', null, array('class' => 'form-control span4', 'placeholder' => 'E-mail', 'style' => 'width: 85%; display: inline;')) !!}'+
+			'<img class="removeMail" style="float: right; height: 23px; width: 23px; cursor: pointer; margin: 5px 2px 0 0;" src="{{ URL('/uploads/minus.png') }}">'+
+			'<img class="addMail" style="float: right; height: 23px; width: 23px; margin: 5px 2px 0 0; cursor: pointer;" src="{{ URL('/uploads/plus.png') }}">'+
+		'</div>'+
+	'</div>'; 
+
+	/*$('#addPhoneButton').click(function() {
+		alert('lol');
+		$("#phoneList").append(template);
+	});*/
+
+	function addPhoneForm() {
+		$("#phoneList").append(phoneTemplate);
+	}
+
+	function addMailForm() {
+		$("#mailList").append(mailTemplate);
+	}
+
+	$(document).ready(function() {
+
+		// this function remove phone number from DB
+		$(document).on("click", 'img.removePhone', function () {
+			if ( $(this).siblings('input').val() === "" ) {
+        		$(this).parents('.removePhone-select-container').remove();
+			} else {
+				var userSlug = $('#userSlug').text();
+				var userPhone = $(this).siblings('input').val();
+				var CSRF_TOKEN = $('input[name="_token"]').val();
+				//$(this).parents('.removePhone-select-container').remove();  
+				$.ajax({
+					type: "POST",
+					url: userSlug + "/delete-phone",
+					data: {userSlug: userSlug,
+						   userPhone: userPhone,
+						   _token: CSRF_TOKEN},
+					success: function(response) {
+						
+						if (response.success) {
+							window.location.replace(userSlug);
+						}
+					}
+				});
+			}
+		});
+
+		// this function remove mail from DB
+		$(document).on("click", 'img.removeMail', function () {
+			if ( $(this).siblings('input').val() === "" ) {
+        		$(this).parents('.removeMail-select-container').remove();
+			} else {
+				var userSlug = $('#userSlug').text();
+				var userMail = $(this).siblings('input').val();
+				var CSRF_TOKEN = $('input[name="_token"]').val();
+				//$(this).parents('.removePhone-select-container').remove();  
+				$.ajax({
+					type: "POST",
+					url: userSlug + "/delete-mail",
+					data: {userSlug: userSlug,
+						   userMail: userMail,
+						   _token: CSRF_TOKEN},
+					success: function(response) {
+						
+						if (response.success) {
+							window.location.replace(userSlug);
+						}
+					}
+				});
+			}
+
+    	});
+
+    	// Add phone number to a user
+    	$(document).on("click", 'img.addPhone', function () {
+			if ( $(this).siblings('input').val() === "" ) {
+        		;
+			} else {
+				var userSlug = $('#userSlug').text();
+				var userPhone = $(this).siblings('input').val();
+				var CSRF_TOKEN = $('input[name="_token"]').val();
+				//$(this).parents('.removePhone-select-container').remove();  
+				$.ajax({
+					type: "POST",
+					url: userSlug + "/add-phone",
+					data: {userSlug: userSlug,
+						   userPhone: userPhone,
+						   _token: CSRF_TOKEN},
+					success: function(response) {
+						
+						if (response.success) {
+							window.location.replace(userSlug);
+						}
+					}
+				});
+			}
+		});
+
+		    	// Add mail to a user
+    	$(document).on("click", 'img.addMail', function () {
+			if ( $(this).siblings('input').val() === "" ) {
+        		;
+			} else {
+				var userSlug = $('#userSlug').text();
+				var userMail = $(this).siblings('input').val();
+				var CSRF_TOKEN = $('input[name="_token"]').val();
+				//$(this).parents('.removePhone-select-container').remove();  
+				$.ajax({
+					type: "POST",
+					url: userSlug + "/add-mail",
+					data: {userSlug: userSlug,
+						   userMail: userMail,
+						   _token: CSRF_TOKEN},
+					success: function(response) {
+						
+						if (response.success) {
+							window.location.replace(userSlug);
+						}
+					}
+				});
+			}
+		});
+
+
+    	/*$(document).on("click", 'img.removeMail',function () {
+    		if ( $(this).siblings('input').val() === "" ) {
+        		$(this).parents('.removeMail-select-container').remove();
+    		} else {
+    			var userSlug = $('#userSlug').text();
+    			var userMail = $(this).siblings('input').val();
+    		}
+
+    	});*/
+
+	});
+
+</script>
+
+
