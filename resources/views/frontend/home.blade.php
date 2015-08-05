@@ -7,7 +7,8 @@
 @section('content')
 
 @foreach($users as $user)
-	<div style="border: 1px solid rgba(0,0,0,.2); border-radius: 6px; height: 100px; box-shadow: 0 5px 15px rgba(0,0,0,.5); padding: 10px; margin: 0 0 10px 0;">
+	<div class="userEdit" style="border: 1px solid rgba(0,0,0,.2); border-radius: 6px; height: 100px; box-shadow: 0 5px 15px rgba(0,0,0,.5); padding: 10px; margin: 0 0 10px 0;">
+		<div id="userSlug" style="display: none;">{{ $user->slug }}</div>
 		<img data-src="holder.js/140x140" class="img-thumbnail pull-left" alt="140x140" src="{{ $user->im_profilo }}" data-holder-rendered="true" style="width: 80px; height: 80px;">
 		<span class="pull-left" style="margin-left: 10px;">
 			<p>{{ $user->nome }} {{ $user->cognome }}</p>
@@ -32,3 +33,22 @@
 @endsection
 
 @section('button') Add New Contact >> @endsection
+
+<script src="{{ url('js/jquery.js') }}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).on('dblclick', ".userEdit", function(){
+			var userSlug = $(this).children("#userSlug").text();
+			$.ajax({
+					type: "GET",
+					url: "edit/" + userSlug,
+					data: {},
+					success: function() {
+						window.location.replace("edit/" + userSlug);
+					}
+				});
+		});
+
+	});
+
+</script>

@@ -59,7 +59,6 @@ class FrontendController extends Controller
         $user->im_profilo = Input::get('image');
         $user->slug = $user->nome.$user->cognome;
 
-
         if (Input::file('image') == "") {
             $user->im_profilo = 'uploads/default.png';
         }
@@ -154,6 +153,22 @@ class FrontendController extends Controller
         return Response::json(['success' => true, 'response' => 'ok']);
     }
 
+    public function updateUserPhoneNumber()
+    {
+        $slug = Input::get('userSlug');
+        $user = User::where('slug', '=', $slug)->first();
+
+        $oldPhone = Input::get('oldUserPhone');
+        $newPhone = Input::get('newUserPhone');
+
+        Number::where(['user_id' => $user->id, 'phone' => $oldPhone])->update(array(
+            'phone'    =>  $newPhone,
+            'user_id'  => $user->id
+        ));
+
+        return Response::json(['success' => true, 'response' => 'ok']);
+    }
+
     public function addMailNumber() 
     {
         $mail = new Email();
@@ -165,6 +180,22 @@ class FrontendController extends Controller
         $mail->user_id = $user->id;
 
         $mail->save();
+
+        return Response::json(['success' => true, 'response' => 'ok']);
+    }
+
+    public function updateUserMail()
+    {
+        $slug = Input::get('userSlug');
+        $user = User::where('slug', '=', $slug)->first();
+
+        $oldMail = Input::get('oldUserMail');
+        $newMail = Input::get('newUserMail');
+
+        Email::where(['user_id' => $user->id, 'email' => $oldMail])->update(array(
+            'email'    =>  $newMail,
+            'user_id'  => $user->id
+        ));
 
         return Response::json(['success' => true, 'response' => 'ok']);
     }
@@ -201,6 +232,47 @@ class FrontendController extends Controller
         //dd($option);
 
         return view('frontend.edit', compact('option'));
+    }
+
+    public function editUserInformation($slug)
+    {
+        //
+        $firstname = Input::get('name');
+        $lastname = Input::get('lastname');
+        $address = Input::get('address');
+        $profileImg = Input::file('image');
+        $newSlug = $firstname.$lastname;
+
+        if (Input::file('image') == "") {
+            User::where('slug', '=', $slug)->update(array(
+            'nome' => $firstname,
+            'cognome' => $lastname,
+            'indirizzo' => $address,
+            'slug' => $newSlug
+            ));
+        }
+        else if (Input::file('image')->isValid()) {
+            $destinationPath = 'uploads'; // upload path
+            $extension = Input::file('image')->getClientOriginalExtension(); // getting image extension
+            $fileName = rand(11111,99999).'.'.$extension; // renameing image
+            Input::file('image')->move($destinationPath, $fileName); // uploading file to given path
+            $newUserPath = $destinationPath.'/'.$fileName;
+            // sending back with message
+            User::where('slug', '=', $slug)->update(array(
+            'nome' => $firstname,
+            'cognome' => $lastname,
+            'indirizzo' => $address,
+            'im_profilo' => $newUserPath,
+            'slug' => $newSlug
+            ));
+
+            //Session::flash('success', 'Upload successfully'); 
+        } else {
+            //dd($profileImg);
+        }
+        //dd($option);
+
+        return Redirect::to('home');
     }
 
     /**

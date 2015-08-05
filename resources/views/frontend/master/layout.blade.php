@@ -77,7 +77,7 @@
                 <h1>Your Favorite Source of Free Bootstrap Themes</h1>
                 <hr>
                 <p>Start Bootstrap can help you build better websites using the Bootstrap CSS framework! Just download your template and start going, no strings attached!</p>
-                <a href="{{ url('home') }}" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
+                <a href="{{ url('home') }}" class="btn btn-primary btn-xl page-scroll">Enter In Contacts Application</a>
             </div>
         </div>
     </header>

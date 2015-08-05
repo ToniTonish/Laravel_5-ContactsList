@@ -12,23 +12,21 @@
 */
 
 Route::get('home', 'FrontendController@showUsers');
-
 Route::post('home', 'FrontEndController@deleteUser');
 
 Route::get('home/addcontact', 'FrontendController@addNewContact');
-
 Route::post('home/addcontact', 'FrontendController@store');
 
 Route::get('edit/{slug}', 'FrontendController@editUser');
-
-Route::post('edit/{slug}', 'FrontendController@editUser');
-
+Route::post('edit/{slug}', 'FrontendController@editUserInformation');
 
 Route::post('edit/{slug}/delete-phone', 'FrontendController@deletePhoneNumber');
 Route::post('edit/{slug}/add-phone', 'FrontendController@addPhoneNumber');
+Route::post('edit/{slug}/update-phone', 'FrontendController@updateUserPhoneNumber');
 
 Route::post('edit/{slug}/delete-mail', 'FrontendController@deleteMail');
 Route::post('edit/{slug}/add-mail', 'FrontendController@addMailNumber');
+Route::post('edit/{slug}/update-mail', 'FrontendController@updateUserMail');
 
 
 Route::get('/', function () {
