@@ -125,7 +125,6 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 
 	$(document).ready(function() {
 
-
 		$(".updateMail").popover({
 			placement: 'left',
 			html : true,
@@ -138,13 +137,15 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 
 		// this function remove phone number from DB
 		$(document).on("click", 'img.removePhone', function () {
+
 			if ( $(this).siblings('input').val() === "" ) {
         		$(this).parents('.removePhone-select-container').remove();
 			} else {
+				var removePhoneNumber = $(this).parents('.removePhone-select-container');
 				var userSlug = $('#userSlug').text();
 				var userPhone = $(this).siblings('input').val();
 				var CSRF_TOKEN = $('input[name="_token"]').val();
-				//$(this).parents('.removePhone-select-container').remove();  
+
 				$.ajax({
 					type: "POST",
 					url: userSlug + "/delete-phone",
@@ -154,7 +155,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 					success: function(response) {
 						
 						if (response.success) {
-							window.location.replace(userSlug);
+							removePhoneNumber.remove();
 						}
 					}
 				});
@@ -166,10 +167,11 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 			if ( $(this).siblings('input').val() === "" ) {
         		$(this).parents('.removeMail-select-container').remove();
 			} else {
+				var removeUserMail = $(this).parents('.removeMail-select-container');
 				var userSlug = $('#userSlug').text();
 				var userMail = $(this).siblings('input').val();
 				var CSRF_TOKEN = $('input[name="_token"]').val();
-				//$(this).parents('.removePhone-select-container').remove();  
+
 				$.ajax({
 					type: "POST",
 					url: userSlug + "/delete-mail",
@@ -179,7 +181,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 					success: function(response) {
 						
 						if (response.success) {
-							window.location.replace(userSlug);
+							removeUserMail.remove();
 						}
 					}
 				});
@@ -192,10 +194,11 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 			if ( $(this).siblings('input').val() === "" ) {
         		;
 			} else {
+				var addPhoneNumber = $(this);
 				var userSlug = $('#userSlug').text();
 				var userPhone = $(this).siblings('input').val();
 				var CSRF_TOKEN = $('input[name="_token"]').val();
-				//$(this).parents('.removePhone-select-container').remove();  
+
 				$.ajax({
 					type: "POST",
 					url: userSlug + "/add-phone",
@@ -205,7 +208,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 					success: function(response) {
 						
 						if (response.success) {
-							window.location.replace(userSlug);
+							addPhoneNumber.remove();
 						}
 					}
 				});
@@ -217,11 +220,12 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 			if ( $(this).siblings('input').val() === "" ) {
         		;
 			} else {
+				var updatePhoneNumber = $(this);
 				var userSlug = $('#userSlug').text();
 				var newUserPhone = $(this).siblings('input').val();
 				var oldUserPhone = $(this).siblings('.hidePhone').text();
 				var CSRF_TOKEN = $('input[name="_token"]').val();
-				//$(this).parents('.removePhone-select-container').remove();  
+	
 				$.ajax({
 					type: "POST",
 					url: userSlug + "/update-phone",
@@ -232,7 +236,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 					success: function(response) {
 						
 						if (response.success) {
-							window.location.replace(userSlug);
+							updatePhoneNumber.remove();
 						}
 					}
 				});
@@ -244,6 +248,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 			if ( $(this).siblings('input').val() === "" ) {
         		;
 			} else {
+				var addUserMail = $(this);
 				var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i;
 				var userMail = $(this).siblings('input').val();
 
@@ -251,7 +256,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 					$(this).popover('hide');
 					var userSlug = $('#userSlug').text();
 					var CSRF_TOKEN = $('input[name="_token"]').val();
-					//$(this).parents('.removePhone-select-container').remove();  
+
 					$.ajax({
 						type: "POST",
 						url: userSlug + "/add-mail",
@@ -261,7 +266,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 						success: function(response) {
 							
 							if (response.success) {
-								window.location.replace(userSlug);
+								addUserMail.remove();
 							}
 						}
 					});
@@ -283,6 +288,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 			if ( $(this).siblings('input').val() === "" ) {
         		;
 			} else {
+				var updateUserMail = $(this);
 				var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i;
 				var newUserMail = $(this).siblings('input').val();
 
@@ -291,7 +297,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 					var userSlug = $('#userSlug').text();
 					var oldUserMail = $(this).siblings('.hideMail').text();
 					var CSRF_TOKEN = $('input[name="_token"]').val();
-					//$(this).parents('.removePhone-select-container').remove();  
+
 					$.ajax({
 						type: "POST",
 						url: userSlug + "/update-mail",
@@ -302,7 +308,7 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 						success: function(response) {
 						
 							if (response.success) {
-								window.location.replace(userSlug);
+								updateUserMail.remove();
 							}
 						}
 					});
@@ -320,21 +326,21 @@ var mailTemplate = 	'<div class="form-group removeMail-select-container">'+
 			}
 		});
 
-			$(document).on("mouseover", 'img.updateMail', function () {
-				var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i;
-				var newUserMail = $(this).siblings('input').val();
-				if (pattern.test(newUserMail)) {
-					$(this).popover('hide');
-				}
-			});
+		$(document).on("mouseover", 'img.updateMail', function () {
+			var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i;
+			var newUserMail = $(this).siblings('input').val();
+			if (pattern.test(newUserMail)) {
+				$(this).popover('hide');
+			}
+		});
 
-			$(document).on("mouseover", 'img.addMail', function () {
-				var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i;
-				var newUserMail = $(this).siblings('input').val();
-				if (pattern.test(newUserMail)) {
-					$(this).popover('hide');
-				}
-			});
+		$(document).on("mouseover", 'img.addMail', function () {
+			var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/i;
+			var newUserMail = $(this).siblings('input').val();
+			if (pattern.test(newUserMail)) {
+				$(this).popover('hide');
+			}
+		});
 		
 
 		$(document).on("keyup", 'div.removePhone-select-container > div > input', function () {

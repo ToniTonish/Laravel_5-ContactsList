@@ -20,7 +20,7 @@ class Setup extends Migration
             $table -> string('cognome');
             $table -> string('indirizzo');
             $table -> string('im_profilo');
-            $table -> string('slug');
+            $table -> string('slug') -> unique();
         });
 
         Schema::create('numbers', function(Blueprint $table)

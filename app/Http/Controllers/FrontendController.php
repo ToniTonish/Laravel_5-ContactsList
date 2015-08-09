@@ -275,16 +275,6 @@ class FrontendController extends Controller
         return Redirect::to('home');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
